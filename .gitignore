@@ -13,3 +13,6 @@ wheels/
 .DS_STORE
 .vscode
 .idea
+
+# Configuration
+.env

@@ -1,9 +1,15 @@
 [project]
 name = "envchemistry"
 version = "0.1.0"
-description = "Add your description here"
+description = "This project is services for Calculating Chemical"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "django>=5.1.5",
+    "djangorestframework>=3.15.2",
+    "graphene>=3.4.3",
+    "graphene-django>=3.2.2",
+    "psycopg2-binary>=2.9.10",
+    "psycopg2>=2.9.10",
+    "python-decouple>=3.8",
 ]
