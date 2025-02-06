@@ -1,5 +1,15 @@
+import re
 import graphene
-from graphene import ObjectType, Float, Field, Dict
+from graphene import ObjectType, Float, Field, String
+from rest.models import Element
+
+
+class MolarMassInput(graphene.InputObjectType):
+    formula = String()
+
+
+class MolarMassResultType(ObjectType):
+    molar_mass = graphene.JSONString()
 
 
 class StoichiometryInput(graphene.InputObjectType):
@@ -12,7 +22,7 @@ class StoichiometryResultType(ObjectType):
 
 
 class PHCalculatorInput(graphene.InputObjectType):
-    concentration_of_hplus = Float()
+    concentration = Float()
 
 
 class PHCalculatorResultType(ObjectType):
@@ -33,6 +43,27 @@ class Query(ObjectType):
     hello = graphene.String(default_value="Chemical Calculator GraphQL API!")
 
 
+class CalculateMolarMass(graphene.Mutation):
+    class Arguments:
+        input = MolarMassInput(required=True)
+
+    Output = MolarMassResultType
+
+    def mutate(self, info, input):
+        formula = input.formula
+        elements = {element.symbol: element.atomic_mass for element in Element.objects.all()}
+        element_counts = re.findall(r'([A-Z][a-z]?)(\d*)', formula)
+        total_mass = 0.0
+
+        for element, count in element_counts:
+            count = int(count) if count else 1
+
+            if element in elements:
+                total_mass += elements[element] * count
+
+        return MolarMassResultType(molar_mass={formula: total_mass})
+
+
 class CalculateStoichiometry(graphene.Mutation):
     class Arguments:
         input = StoichiometryInput(required=True)
@@ -42,8 +73,12 @@ class CalculateStoichiometry(graphene.Mutation):
     def mutate(self, info, input):
         reactants = input.reactants
         products = input.products
+        molar_ratio = {
+            product: {
+                reactant: products[product] / reactants[reactant] for reactant in reactants
+            } for product in products
+        }
 
-        molar_ratio = {key: value / reactants[key] for key, value in products.items()}
         return StoichiometryResultType(molar_ratio=molar_ratio)
 
 
@@ -54,8 +89,9 @@ class CalculatePH(graphene.Mutation):
     Output = PHCalculatorResultType
 
     def mutate(self, info, input):
-        concentration_of_hplus = input.concentration_of_hplus
-        ph = -1 * (concentration_of_hplus ** -1)
+        concentration = input.concentration
+        ph = -1 * (concentration ** -1)
+
         return PHCalculatorResultType(ph=ph)
 
 
@@ -69,12 +105,13 @@ class CalculateIdealGasLaw(graphene.Mutation):
         pressure = input.pressure
         volume = input.volume
         temperature = input.temperature
-
         n = (pressure * volume) / (0.0821 * temperature)  # Menggunakan konstanta gas ideal
+
         return IdealGasLawResultType(n=n)
 
 
 class Mutation(ObjectType):
+    calculate_molar_mass = CalculateMolarMass.Field()
     calculate_stoichiometry = CalculateStoichiometry.Field()
     calculate_ph = CalculatePH.Field()
     calculate_ideal_gas_law = CalculateIdealGasLaw.Field()

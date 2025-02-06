@@ -60,8 +60,8 @@
 }
 ```
 
-### Stoichiometry
-###### calculate/stoichiometry/
+### Stoichiometry **Reactant | Product**
+###### calculate/stoichiometry/reactant-product/
 ##### payload
 ```json
 {
@@ -84,5 +84,123 @@
 }
 ```
 
+### Stoichiometry **Law of Conservation of Mass**
+###### calculate/stoichiometry/conservation-mass/
+##### payload
+```json
+{
+    "reactants": {
+        "H2": 4.0,
+        "O2": 32.0
+    },
+    "products": {
+        "H2O": 41.0
+    }
+}
+
+```
+##### response
+```json
+{
+    "message": "Mass is not conserved",
+    "data": {
+        "total_mass_reactants": 36.0,
+        "total_mass_products": 41.0,
+        "mass_conserved": false
+    }
+}
+```
 
 ## GraphQL
+### Molar Mass
+###### graphql/
+##### mutation
+```graphql
+mutation {
+  calculateMolarMass(input: {
+    formula: "H2O"
+  }) {
+    molarMass
+  }
+}
+```
+##### response
+```json
+{
+  "data": {
+    "calculateMolarMass": {
+      "molarMass": "{\"H2O\": 18.015}"
+    }
+  }
+}
+```
+
+### Stoichiometry **Reactant | Product**
+###### graphql/
+##### mutation
+```graphql
+mutation {
+  calculateStoichiometry(input: {
+    reactants: "{\"H2\":2,\"O2\":1}",
+    products: "{\"H2O\":2}"
+  }) {
+    molarRatio
+  }
+}
+```
+##### response
+```json
+{
+  "data": {
+    "calculateStoichiometry": {
+      "molarRatio": "{\"H2O\": {\"H2\": 1.0, \"O2\": 2.0}}"
+    }
+  }
+}
+```
+
+### pH
+###### graphql/
+##### mutation
+```graphql
+mutation {
+  calculatePh(input: { concentration: 0.001 }) {
+    ph
+  }
+}
+```
+##### response
+```json
+{
+  "data": {
+    "calculatePh": {
+      "ph": -1000
+    }
+  }
+}
+```
+
+### Gas Law
+###### graphql/
+##### mutation
+```graphql
+mutation {
+  calculateIdealGasLaw(input: {
+    pressure: 1,
+    volume: 22.4,
+    temperature: 273
+  }) {
+    n
+  }
+}
+```
+##### response
+```json
+{
+  "data": {
+    "calculateIdealGasLaw": {
+      "n": 0.9994066023298664
+    }
+  }
+}
+```

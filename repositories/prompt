@@ -1,0 +1,31 @@
+views.py
+class StoichiometryReactantProductView(APIView):
+    def post(self, request):
+        serializer = ReactantProductSerializer(data=request.data)
+
+        if serializer.is_valid():
+            reactants = serializer.validated_data['reactants']
+            products = serializer.validated_data['products']
+            result = self.calculate_stoichiometry(reactants, products)
+
+            return Response(result, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @staticmethod
+    def calculate_stoichiometry(reactants, products):
+        molar_ratio = {
+            product: {reactant: products[product] / reactants[reactant] for reactant in reactants}
+            for product in products
+        }
+
+        return {"message": "Success", "data": {"molar_ratio": molar_ratio}}
+
+serializers.py
+class ReactantProductSerializer(serializers.Serializer):
+    reactants = serializers.DictField(child=serializers.FloatField())
+    products = serializers.DictField(child=serializers.FloatField())
+
+
+ini adalah stoichiometry untuk Penentuan jumlah reaktan dan produk
+tugasmu membuat stoichiometry untuk Law of Conservation of Mass
