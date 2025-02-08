@@ -94,7 +94,6 @@ class StoichiometryReactantProductView(APIView):
         if serializer.is_valid():
             reactants = serializer.validated_data['reactants']
             products = serializer.validated_data['products']
-
             result = self.determine_reactants_products(reactants, products)
 
             return Response(result, status=status.HTTP_200_OK)
@@ -133,7 +132,6 @@ class StoichiometryLomonosovLavoisierView(APIView):
     def check_mass_conservation(reactants, products):
         total_mass_reactants = sum(reactants.values())
         total_mass_products = sum(products.values())
-
         is_conserved = abs(total_mass_reactants - total_mass_products) < 1e-6  # little tolerance for floating point
 
         return {

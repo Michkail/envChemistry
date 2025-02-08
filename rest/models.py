@@ -13,3 +13,26 @@ class Element(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Compound(models.Model):
+    name = models.CharField(max_length=100)
+    chemical_formula = models.CharField(max_length=50)
+    category = models.CharField(max_length=50)
+    bond_type = models.CharField(max_length=50)
+    properties = models.TextField()
+    uses = models.TextField()
+    status = models.CharField(max_length=30)
+    discovery_date = models.DateField(null=True, blank=True)
+    source = models.TextField()
+
+    def __str__(self):
+        return self.name
+
+
+class CompoundElement(models.Model):
+    compound = models.ForeignKey(Compound, on_delete=models.CASCADE)
+    element = models.ForeignKey(Element, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.compound.name} - {self.element.name}"
