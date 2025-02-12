@@ -112,6 +112,55 @@
 ```
 
 ## GraphQL
+### List Element
+###### graphql/
+##### mutation
+```graphql
+mutation {
+  getElementList {
+    atomicMass
+    atomicNumber
+    symbol
+    name
+    category
+    density
+    meltingPoint
+    boilingPoint
+  }
+}
+```
+##### response
+```json
+{
+  "data": {
+    "getElementList": [
+      {
+        "atomicMass": 1.008,
+        "atomicNumber": 1,
+        "symbol": "H",
+        "name": "Hydrogen",
+        "category": "Nonmetal",
+        "density": 0.00008988,
+        "meltingPoint": -259.16,
+        "boilingPoint": -252.87
+      },
+      {
+        "atomicMass": 6.94,
+        "atomicNumber": 3,
+        "symbol": "Li",
+        "name": "Lithium",
+        "category": "Alkali Metal",
+        "density": 0.534,
+        "meltingPoint": 180.54,
+        "boilingPoint": 1342
+      },
+      ...
+    ]
+  }
+}
+```
+
+
 ### Molar Mass
 ###### graphql/
 ##### mutation

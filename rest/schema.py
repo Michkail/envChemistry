@@ -4,6 +4,17 @@ from graphene import ObjectType, Float, Field, String
 from rest.models import Element
 
 
+class ElementType(graphene.ObjectType):
+    atomic_number = graphene.Int()
+    atomic_mass = graphene.Float()
+    symbol = graphene.String()
+    name = graphene.String()
+    category = graphene.String()
+    density = graphene.Float()
+    melting_point = graphene.Float()
+    boiling_point = graphene.Float()
+
+
 class MolarMassInput(graphene.InputObjectType):
     formula = String()
 
@@ -41,6 +52,28 @@ class IdealGasLawResultType(ObjectType):
 
 class Query(ObjectType):
     hello = graphene.String(default_value="Chemical Calculator GraphQL API!")
+
+
+class GetElementList(graphene.Mutation):
+    class Arguments:
+        pass
+
+    Output = graphene.List(ElementType)
+
+    def mutate(self, info):
+        elements = Element.objects.all()
+        return [
+            {
+                "atomic_number": e.atomic_number,
+                "atomic_mass": e.atomic_mass,
+                "symbol": e.symbol,
+                "name": e.name,
+                "category": e.category,
+                "density": e.density,
+                "melting_point": e.melting_point,
+                "boiling_point": e.boiling_point
+            } for e in elements
+        ]
 
 
 class CalculateMolarMass(graphene.Mutation):
@@ -105,12 +138,13 @@ class CalculateIdealGasLaw(graphene.Mutation):
         pressure = input.pressure
         volume = input.volume
         temperature = input.temperature
-        n = (pressure * volume) / (0.0821 * temperature)  # Menggunakan konstanta gas ideal
+        n = (pressure * volume) / (0.0821 * temperature)
 
         return IdealGasLawResultType(n=n)
 
 
 class Mutation(ObjectType):
+    getElementList = GetElementList.Field()
     calculate_molar_mass = CalculateMolarMass.Field()
     calculate_stoichiometry = CalculateStoichiometry.Field()
     calculate_ph = CalculatePH.Field()
