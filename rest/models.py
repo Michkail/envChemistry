@@ -24,6 +24,8 @@ class Compound(models.Model):
     uses = models.TextField()
     status = models.CharField(max_length=30)
     discovery_date = models.DateField(null=True, blank=True)
+    discovery_period = models.CharField(max_length=50, null=True, blank=True)
+    discovery_by = models.CharField(max_length=70, null=True, blank=True)
     source = models.TextField()
 
     def __str__(self):
