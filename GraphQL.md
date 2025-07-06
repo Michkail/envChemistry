@@ -6,14 +6,8 @@
 ```graphql
 mutation {
   getElementList {
-    atomicMass
-    atomicNumber
-    symbol
-    name
-    category
-    density
-    meltingPoint
-    boilingPoint
+    message
+    data
   }
 }
 ```
@@ -21,43 +15,44 @@ mutation {
 ```json
 {
   "data": {
-    "getElementList": [
-      {
-        "atomicMass": 1.008,
-        "atomicNumber": 1,
-        "symbol": "H",
-        "name": "Hydrogen",
-        "category": "Nonmetal",
-        "density": 0.00008988,
-        "meltingPoint": -259.16,
-        "boilingPoint": -252.87
-      },
-      {
-        "atomicMass": 6.94,
-        "atomicNumber": 3,
-        "symbol": "Li",
-        "name": "Lithium",
-        "category": "Alkali Metal",
-        "density": 0.534,
-        "meltingPoint": 180.54,
-        "boilingPoint": 1342
-      },
-      ...
-    ]
+    "getElementList": {
+      "message": "Success",
+      "data": [
+        {
+          "atomic_number": 1,
+          "atomic_mass": 1.008,
+          "symbol": "H",
+          "name": "Hydrogen",
+          "category": "Nonmetal",
+          "density": 0.08988,
+          "melting_point": 13.99,
+          "boiling_point": 20.271
+        },
+        ...
+        {
+          "atomic_number": 118,
+          "atomic_mass": 294,
+          "symbol": "Og",
+          "name": "Oganesson",
+          "category": "Noble Gas",
+          "density": 47,
+          "melting_point": 2800,
+          "boiling_point": 7100
+        }
+      ]
+    }
   }
 }
 ```
-
 
 ### Molar Mass
 ###### graphql/
 ##### mutation
 ```graphql
 mutation {
-  calculateMolarMass(input: {
-    formula: "H2O"
-  }) {
-    molarMass
+  calculateMolarMass(input: { formula: "H2O" }) {
+    message
+    data
   }
 }
 ```
@@ -66,7 +61,10 @@ mutation {
 {
   "data": {
     "calculateMolarMass": {
-      "molarMass": "{\"H2O\": 18.015}"
+      "message": "Success",
+      "data": {
+        "H2O": 18.015
+      }
     }
   }
 }
@@ -78,10 +76,11 @@ mutation {
 ```graphql
 mutation {
   calculateStoichiometry(input: {
-    reactants: "{\"H2\":2,\"O2\":1}",
-    products: "{\"H2O\":2}"
+    reactants: "{ \"H2\": 2, \"O2\": 1 }",
+    products: "{ \"H2O\": 2 }"
   }) {
-    molarRatio
+    message
+    data
   }
 }
 ```
@@ -90,7 +89,15 @@ mutation {
 {
   "data": {
     "calculateStoichiometry": {
-      "molarRatio": "{\"H2O\": {\"H2\": 1.0, \"O2\": 2.0}}"
+      "message": "Success",
+      "data": {
+        "molar_ratio": {
+          "H2O": {
+            "H2": 1,
+            "O2": 2
+          }
+        }
+      }
     }
   }
 }
@@ -101,8 +108,9 @@ mutation {
 ##### mutation
 ```graphql
 mutation {
-  calculatePh(input: { concentration: 0.001 }) {
-    ph
+  calculatePh(input: { concentration: 0.0001 }) {
+    message
+    data
   }
 }
 ```
@@ -111,7 +119,11 @@ mutation {
 {
   "data": {
     "calculatePh": {
-      "ph": -1000
+      "message": "Success",
+      "data": {
+        "pH": 4,
+        "pOH": 10
+      }
     }
   }
 }
@@ -123,11 +135,12 @@ mutation {
 ```graphql
 mutation {
   calculateIdealGasLaw(input: {
-    pressure: 1,
+    pressure: 1.0,
     volume: 22.4,
-    temperature: 273
+    temperature: 273.15
   }) {
-    n
+    message
+    data
   }
 }
 ```
@@ -136,7 +149,10 @@ mutation {
 {
   "data": {
     "calculateIdealGasLaw": {
-      "n": 0.9994066023298664
+      "message": "Success",
+      "data": {
+        "n": 0.9988577793741664
+      }
     }
   }
 }
