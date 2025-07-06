@@ -114,7 +114,6 @@ class StoichiometryReactantProductView(APIView):
         }
 
 
-#  Lomonosov-Lavoisier
 class StoichiometryLomonosovLavoisierView(APIView):
     def post(self, request):
         serializer = ReactantProductSerializer(data=request.data)
@@ -233,7 +232,6 @@ class EquilibriumConstantView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# 3. Energi Bebas Gibbs
 class GibbsFreeEnergyView(APIView):
     @staticmethod
     def post(request):
@@ -257,7 +255,6 @@ class GibbsFreeEnergyView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# 4. Potensial Sel Galvani
 class CellPotentialView(APIView):
     @staticmethod
     def post(request):
@@ -278,7 +275,6 @@ class CellPotentialView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# 5. Laju Reaksi
 class RateLawView(APIView):
     @staticmethod
     def post(request):
@@ -299,7 +295,6 @@ class RateLawView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# 6. Hukum Henry
 class HenryLawView(APIView):
     @staticmethod
     def post(request):
@@ -320,7 +315,6 @@ class HenryLawView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# 7. Titik Ekuivalen Titrasi
 class TitrationEquivalenceView(APIView):
     @staticmethod
     def post(request):
@@ -342,7 +336,6 @@ class TitrationEquivalenceView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# 8. Hukum Raoult
 class RaoultLawView(APIView):
     @staticmethod
     def post(request):
@@ -363,7 +356,6 @@ class RaoultLawView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# 9. Entalpi & Entropi
 class EnthalpyEntropyView(APIView):
     def post(self, request):
         serializer = EnthalpySerializer(data=request.data)
@@ -383,7 +375,6 @@ class EnthalpyEntropyView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# 10. pH Larutan Buffer
 class BufferPHView(APIView):
     @staticmethod
     def post(request):
