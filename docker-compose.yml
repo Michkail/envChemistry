@@ -3,10 +3,10 @@ services:
     image: ex-graphql:1.0.0
     container_name: ex-graphql
     restart: always
-    command: ["sh", "-c", "uv run manage.py migrate --fake-initial && uv run manage.py collectstatic --noinput && uv run manage.py runserver 0.0.0.0:8000"]
+    command: ["sh", "-c", "uv run manage.py migrate --fake-initial && uv run manage.py collectstatic --noinput && uv run manage.py runserver 0.0.0.0:8003"]
     environment:
       TZ: "Asia/Jakarta"
     volumes:
       - /opt/.venv
     ports:
-      - "8000:8000"
+      - "8003:8003"
