@@ -129,6 +129,35 @@ mutation {
 }
 ```
 
+### pHAccurate
+###### graphql/
+##### mutation
+```graphql
+mutation {
+  calculatePhAccurate(input: {
+    concentration: 0.0001,
+    pka: 4.75
+  }) {
+    message
+    data
+  }
+}
+```
+##### response
+```json
+{
+  "data": {
+    "calculatePhAccurate": {
+      "message": "Success",
+      "data": {
+        "pH": 4.375,
+        "pOH": 9.625
+      }
+    }
+  }
+}
+```
+
 ### Gas Law
 ###### graphql/
 ##### mutation
@@ -152,6 +181,38 @@ mutation {
       "message": "Success",
       "data": {
         "n": 0.9988577793741664
+      }
+    }
+  }
+}
+```
+
+### Van Der Waals
+###### graphql/
+##### mutation
+```graphql
+mutation {
+  calculateVanDerWaals(input: {
+    pressure: 1.0,
+    volume: 1.0,
+    moles: 1.0,
+    temperature: 300,
+    constA: 3.6,
+    constB: 0.0427
+  }) {
+    message
+    data
+  }
+}
+```
+##### response
+```json
+{
+  "data": {
+    "calculateVanDerWaals": {
+      "message": "Success",
+      "data": {
+        "corrected_pressure": 22.128611720463805
       }
     }
   }

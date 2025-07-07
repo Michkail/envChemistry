@@ -29,12 +29,7 @@ class StoichiometryExtendedInput(graphene.InputObjectType):
 
 class PHInput(graphene.InputObjectType):
     concentration = Float()
-
-
-class GasLawInput(graphene.InputObjectType):
-    pressure = Float()
-    volume = Float()
-    temperature = Float()
+    pka = graphene.Float(required=True)
 
 
 class VanDerWaalsInput(graphene.InputObjectType):
@@ -275,22 +270,13 @@ class CalculatePHGraphQL(graphene.Mutation):
     Output = GenericSuccessResult
 
     def mutate(self, info, input):
-        ph = -math.log10(input.concentration)
+        concentration = input.concentration
+        pka = input.pka
+        ph = 0.5 * (pka - math.log10(concentration))
         poh = 14 - ph
 
         return GenericSuccessResult(message="Success", data={"pH": ph, "pOH": poh})
 
-
-class CalculateGasLaw(graphene.Mutation):
-    class Arguments:
-        input = GasLawInput(required=True)
-
-    Output = GenericSuccessResult
-
-    def mutate(self, info, input):
-        n = (input.pressure * input.volume) / (0.0821 * input.temperature)
-
-        return GenericSuccessResult(message="Success", data={"n": n})
 
 
 class CalculateVanDerWaals(graphene.Mutation):
@@ -497,7 +483,6 @@ class Mutation(ObjectType):
     calculate_ph = CalculatePH.Field()
     calculate_ideal_gas_law = CalculateIdealGasLaw.Field()
     calculate_ph_accurate = CalculatePHGraphQL.Field()
-    calculate_gas_law = CalculateGasLaw.Field()
     calculate_van_der_waals = CalculateVanDerWaals.Field()
     calculate_equilibrium = CalculateEquilibrium.Field()
     calculate_gibbs = CalculateGibbs.Field()
