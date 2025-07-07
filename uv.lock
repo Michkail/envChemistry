@@ -46,6 +46,7 @@ dependencies = [
     { name = "faker" },
     { name = "graphene" },
     { name = "graphene-django" },
+    { name = "promise" },
     { name = "psycopg2-binary" },
     { name = "python-decouple" },
 ]
@@ -57,6 +58,7 @@ requires-dist = [
     { name = "faker", specifier = ">=37.0.2" },
     { name = "graphene", specifier = ">=3.4.3" },
     { name = "graphene-django", specifier = ">=3.2.2" },
+    { name = "promise", specifier = ">=2.3" },
     { name = "psycopg2-binary", specifier = ">=2.9.10" },
     { name = "python-decouple", specifier = ">=3.8" },
 ]
