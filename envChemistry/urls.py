@@ -19,6 +19,13 @@ from django.urls import path, include
 from graphene_django.views import GraphQLView
 from django.views.decorators.csrf import csrf_exempt
 
+
+class CustomGraphQLView(GraphQLView):
+    def __init__(self, *args, **kwargs):
+        kwargs["introspection"] = True
+        super().__init__(*args, **kwargs)
+        
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/v1/user/', include("users.urls")),
