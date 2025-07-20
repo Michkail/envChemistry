@@ -139,5 +139,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.CustomUser'
 
 GRAPHENE = {
-    "SCHEMA": 'rest.schema.schema'
+    "SCHEMA": 'rest.graphql.schema.schema'
 }

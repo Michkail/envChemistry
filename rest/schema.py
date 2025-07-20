@@ -60,7 +60,7 @@ class CellPotentialInput(graphene.InputObjectType):
 
 class RateLawInput(graphene.InputObjectType):
     rate_constant = Float()
-    concentrations = List(List(Float))  # [(conc, order)]
+    concentrations = List(List(Float))
 
 
 class HenryLawInput(graphene.InputObjectType):
