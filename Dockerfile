@@ -4,7 +4,7 @@ LABEL authors="pitrlabs"
 WORKDIR /app
 
 RUN apk add --no-cache --no-check-certificate\
-    mariadb-dev \
+    postgresql-dev \
     gcc \
     musl-dev \
     libffi-dev \
