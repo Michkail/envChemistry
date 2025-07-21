@@ -15,3 +15,22 @@ class ElementType(graphene.ObjectType):
 class ElementListResponse(graphene.ObjectType):
     message = graphene.String()
     data = graphene.List(ElementType)
+
+
+class CompoundType(graphene.ObjectType):
+    name = graphene.String()
+    chemical_formula = graphene.String()
+    category = graphene.String()
+    bond_type = graphene.String()
+    properties = graphene.String()
+    uses = graphene.String()
+    status = graphene.String()
+    discovery_date = graphene.String()
+    discovery_period = graphene.String()
+    discovery_by = graphene.String()
+    source = graphene.String()
+
+
+class CompoundListResponse(graphene.ObjectType):
+    message = graphene.String()
+    data = graphene.List(CompoundType)

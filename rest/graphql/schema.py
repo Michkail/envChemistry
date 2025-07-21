@@ -1,21 +1,19 @@
 import graphene
 import math
-from rest.models import Element
-from .elements import ElementListResponse, ElementType
+from rest.models import Element, Compound
+from .elements import ElementListResponse, ElementType, CompoundListResponse, CompoundType
 from .inputs import *
-
-
 
 
 class Query(graphene.ObjectType):
     hello = graphene.String()
     elements = graphene.Field(ElementListResponse)
+    compounds = graphene.Field(CompoundListResponse)
     calculate_ph = graphene.Float(input=PHInput(required=True))
     calculate_gibbs = graphene.Float(input=GibbsInput(required=True))
 
     def resolve_hello(root, info):
         return "Welcome human"
-    
 
     def resolve_elements(root, info):
         data = [ElementType(atomic_number=el.atomic_number,
@@ -28,9 +26,22 @@ class Query(graphene.ObjectType):
                             boiling_point=el.boiling_point) for el in Element.objects.all()]
         
         return ElementListResponse(message="Success", data=data)
-    
 
-    
+    def resolve_compounds(root, info):
+        data = [CompoundType(name=co.name,
+                             chemical_formula=co.chemical_formula,
+                             category=co.category,
+                             bond_type=co.bond_type,
+                             properties=co.properties,
+                             uses=co.uses,
+                             status=co.status,
+                             discovery_date=co.discovery_date,
+                             discovery_period=co.discovery_period,
+                             discovery_by=co.discovery_by,
+                             source=co.source) for co in Compound.objects.all()]
+        
+        return CompoundListResponse(message="Success", data=data)
+
     def resolve_calculate_ph(root, info, input):
         if input.concentration is None or input.concentration <= 0:
             return None
