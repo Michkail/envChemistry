@@ -61,6 +61,16 @@ class CompoundType(graphene.ObjectType):
     source = graphene.String()
 
 
+class ReactantRatioType(graphene.ObjectType):
+    formula = graphene.String()
+    ratio = graphene.Float()
+
+
+class StoichiometryResultType(graphene.ObjectType):
+    product = graphene.String()
+    ratios = graphene.List(ReactantRatioType)
+
+
 class CompoundListResponse(graphene.ObjectType):
     message = graphene.String()
     data = graphene.List(CompoundType)
