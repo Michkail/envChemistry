@@ -4,6 +4,48 @@ class CompoundInput(graphene.InputObjectType):
     formula = graphene.String()
     coefficient = graphene.Float()
 
+
+class IsotopeInput(graphene.InputObjectType):
+    symbol = graphene.String(required=True)
+    mass = graphene.Float()
+    abundance = graphene.Float()
+    half_life = graphene.String()
+    decay_mode = graphene.String()
+
+
+class ElementUpdateInput(graphene.InputObjectType):
+    atomic_number = graphene.Int(required=True)
+    atomic_mass = graphene.Decimal()
+    atomic_radius = graphene.Decimal()
+    covalent_radius = graphene.Decimal()
+    van_der_waals_radius = graphene.Decimal()
+    symbol = graphene.String()
+    name = graphene.String()
+    category = graphene.String()
+    period = graphene.Int()
+    group = graphene.Int()
+    block = graphene.String()
+    phase = graphene.String()
+    density = graphene.Decimal()
+    melting_point = graphene.Decimal()
+    boiling_point = graphene.Decimal()
+    electron_configuration = graphene.String()
+    electronegativity = graphene.Decimal()
+    electron_affinity = graphene.Decimal()
+    electrical_conductivity = graphene.Decimal()
+    thermal_conductivity = graphene.Decimal()
+    ionization_energy = graphene.Decimal()
+    oxidation_state = graphene.List(graphene.Int)
+    abundance_earth_crust = graphene.Decimal()
+    abundance_universe = graphene.Decimal()
+    specific_heat = graphene.Decimal()
+    appearance = graphene.String()
+    crystal_structure = graphene.String()
+    discovery_year = graphene.Int()
+    discovery_by = graphene.String()
+    isotopes = graphene.List(IsotopeInput)
+
+
 class ConcentrationInput(graphene.InputObjectType):
     value = graphene.Float()
     order = graphene.Float()
