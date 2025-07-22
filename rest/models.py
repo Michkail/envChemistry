@@ -2,9 +2,6 @@ from django.db import models
 
 
 class Element(models.Model):
-    from django.db import models
-
-class Element(models.Model):
     BLOCK_CHOICES = [
         ('s', 'S Block'),
         ('p', 'P Block'), 
