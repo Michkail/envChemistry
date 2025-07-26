@@ -108,7 +108,10 @@ class Query(graphene.ObjectType):
                             thermal_conductivity=el.thermal_conductivity,
                             ionization_energy=el.ionization_energy,
                             isotopes=[IsotopeType(symbol=iso.symbol,
-                                                  mass=iso.mass) for iso in el.isotopes.all()],
+                                                  mass=iso.mass,
+                                                  abundance=iso.abundance,
+                                                  half_life=iso.half_life,
+                                                  decay_mode=iso.decay_mode) for iso in el.isotopes.all()],
                             oxidation_state=el.oxidation_state,
                             abundance_earth_crust=el.abundance_earth_crust,
                             abundance_universe=el.abundance_universe,
@@ -116,7 +119,7 @@ class Query(graphene.ObjectType):
                             appearance=el.appearance,
                             crystal_structure=el.crystal_structure,
                             discovery_year=el.discovery_year,
-                            discovery_by=el.discovery_by) for el in Element.objects.all()]
+                            discovery_by=el.discovery_by) for el in Element.objects.all().order_by("atomic_number")]
         
         return ElementListResponse(message="Success", data=data)
 
