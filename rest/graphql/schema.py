@@ -1,9 +1,9 @@
 import graphene
 import math
-from rest.models import Element, Compound, Isotope
+from rest.models import Element, Compound, Isotope, CompoundElement
 from .elements import (IsotopeType, ElementListResponse, ElementType, 
-                       CompoundListResponse, CompoundType,
-                       ReactantRatioType, StoichiometryResultType)
+                       CompoundListResponse, ReactantRatioType, 
+                       StoichiometryResultType)
 from .inputs import *
 
     
@@ -51,10 +51,90 @@ class UpdateElements(graphene.Mutation):
         ok = all("Updated" in m for m in messages)
 
         return UpdateElements(ok=ok, messages=messages)
+    
+
+class CreateCompounds(graphene.Mutation):
+    class Arguments:
+        inputs = CompoundsInput(required=True)
+
+    ok = graphene.Boolean()
+    message = graphene.String()
+
+    @staticmethod
+    def mutate(root, info, inputs):
+        try:
+            compound = Compound.objects.create(
+                name=inputs.name,
+                chemical_formula=inputs.chemical_formula,
+                category=inputs.category,
+                bond_type=inputs.bond_type,
+                properties=inputs.properties,
+                uses=inputs.uses,
+                status=inputs.status,
+                discovery_date=inputs.discovery_date,
+                discovery_period=inputs.discovery_period,
+                discovery_by=inputs.discovery_by,
+                source=inputs.source,
+            )
+
+            for el in inputs.elements:
+                element = Element.objects.get(symbol=el.element_symbol)
+                CompoundElement.objects.create(compound=compound, element=element)
+
+            return CreateCompounds(ok=True, message=f"Compound '{compound.name}' created")
+
+        except Element.DoesNotExist as e:
+            return CreateCompounds(ok=False, message=f"Element not found: {e}")
+
+        except Exception as e:
+            return CreateCompounds(ok=False, message=str(e))
+
+    
+class UpdateCompounds(graphene.Mutation):
+    class Arguments:
+        id = graphene.ID(required=True)
+        inputs = CompoundsInput(required=True)
+
+    ok = graphene.Boolean()
+    message = graphene.String()
+
+    @staticmethod
+    def mutate(root, info, id, inputs):
+        try:
+            compound = Compound.objects.get(id=id)
+
+            for field in CompoundsInput._meta.fields:
+                if field != "elements":
+                    val = getattr(inputs, field, None)
+
+                    if val is not None:
+                        setattr(compound, field, val)
+
+            compound.save()
+
+            if inputs.elements is not None:
+                CompoundElement.objects.filter(compound=compound).delete()
+
+                for el in inputs.elements:
+                    element = Element.objects.get(symbol=el.element_symbol)
+                    CompoundElement.objects.create(compound=compound, element=element)
+
+            return UpdateCompounds(ok=True, message=f"Compound '{compound.name}' updated")
+
+        except Compound.DoesNotExist:
+            return UpdateCompounds(ok=False, message="Compound not found")
+
+        except Element.DoesNotExist as e:
+            return UpdateCompounds(ok=False, message=f"Element not found: {e}")
+
+        except Exception as e:
+            return UpdateCompounds(ok=False, message=str(e))
         
 
 class Mutation(graphene.ObjectType):
     update_element = UpdateElements.Field()
+    update_compounds = UpdateCompounds.Field()
+    create_compounds = CreateCompounds.Field()
 
 
 class Query(graphene.ObjectType):
@@ -124,17 +204,7 @@ class Query(graphene.ObjectType):
         return ElementListResponse(message="Success", data=data)
 
     def resolve_compounds(root, info):
-        data = [CompoundType(name=co.name,
-                             chemical_formula=co.chemical_formula,
-                             category=co.category,
-                             bond_type=co.bond_type,
-                             properties=co.properties,
-                             uses=co.uses,
-                             status=co.status,
-                             discovery_date=co.discovery_date,
-                             discovery_period=co.discovery_period,
-                             discovery_by=co.discovery_by,
-                             source=co.source) for co in Compound.objects.all()]
+        data = Compound.objects.all().order_by("id")
         
         return CompoundListResponse(message="Success", data=data)
 

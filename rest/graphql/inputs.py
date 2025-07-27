@@ -160,3 +160,26 @@ class GasDiffusionInput(graphene.InputObjectType):
 
 class MolarMassInput(graphene.InputObjectType):
     formula = graphene.String()
+
+
+class CompoundsElementInput(graphene.InputObjectType):
+    element_symbol = graphene.String(required=True)
+
+
+class CompoundsInput(graphene.InputObjectType):
+    name = graphene.String(required=True)
+    chemical_formula = graphene.String(required=True)
+    category = graphene.String(required=True)
+    bond_type = graphene.String(required=True)
+    properties = graphene.String(required=True)
+    uses = graphene.String(required=True)
+    status = graphene.String(required=True)
+    discovery_date = graphene.String()
+    discovery_period = graphene.String()
+    discovery_by = graphene.String()
+    source = graphene.String(required=True)
+    elements = graphene.List(CompoundsElementInput, required=True)
+
+
+class CompoundsUpdateInput(CompoundsInput):
+    id = graphene.ID(required=True)
